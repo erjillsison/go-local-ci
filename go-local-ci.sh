@@ -7,8 +7,6 @@ echo "creating temp dir $OUTDIR"
 mkdir -p $OUTDIR
 echo "running tests..."
 go test -coverprofile=$OUTDIR/coverage.out -race $(go list ./...)
-echo "running golint..."
-golint ./...
 echo "running golangci-lint..."
 golangci-lint run --verbose --timeout=20m0s --out-format checkstyle \
 $(if [ ! -f .golangci.yml ]; 
