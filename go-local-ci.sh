@@ -13,7 +13,7 @@ mkdir -p $OUTDIR
 echo "running tests..."
 go test -race \
 -coverprofile=$OUTDIR/coverage.out \
-$(go list ./...)
+./...
 
 echo "running golangci-lint..."
 golangci-lint run --verbose --timeout=3m0s \
