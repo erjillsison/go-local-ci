@@ -8,7 +8,8 @@ mkdir -p $OUTDIR
 echo "running tests..."
 go test -coverprofile=$OUTDIR/coverage.out -race $(go list ./...)
 echo "running golangci-lint..."
-golangci-lint run --verbose --timeout=20m0s --out-format checkstyle \
+golangci-lint run --timeout=3m0s \
+# --out-format checkstyle \ # use this if uploading to SonarQube
 $(if [ ! -f .golangci.yml ]; 
     then echo "--enable goimports,golint,dupl,exportloopref,goconst,bodyclose,dogsled,funlen,misspell,unparam"; 
 fi) ./... | tee "$OUTDIR/gcilint.out"
