@@ -11,7 +11,7 @@ echo "creating temp dir $OUTDIR"
 mkdir -p $OUTDIR
 
 echo "running tests..."
-go test -race \
+go test -race -tags=integration -v \
 -coverprofile=$OUTDIR/coverage.out \
 ./...
 
