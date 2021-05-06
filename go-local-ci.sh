@@ -21,7 +21,7 @@ $(if [ "$ENABLE_SONARQUBE" -eq "1" ]; then
    echo "--out-format checkstyle";
 fi) \
 $(if [ ! -f .golangci.yml ]; then 
-    echo "--enable goimports,golint,dupl,exportloopref,goconst,bodyclose,dogsled,funlen,misspell,unparam";
+    echo "--enable goimports,govet,golint,dupl,exportloopref,goconst,bodyclose,dogsled,funlen,misspell,unparam";
 fi) \
 ./... | tee "$OUTDIR/gcilint.out"
 
