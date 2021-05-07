@@ -11,7 +11,7 @@ echo "creating temp dir $OUTDIR"
 mkdir -p $OUTDIR
 
 echo "running tests..."
-go test -race -tags=integration -v \
+go test -race -tags=integration \
 -coverprofile=$OUTDIR/coverage.out \
 ./...
 
@@ -43,4 +43,4 @@ if [ "$ENABLE_SONARQUBE" -eq "1" ]; then
 fi
 
 echo "removing temp dir $OUTDIR"
-rm -rf $OUTDIR
+rm -rf $OUTDIR# echo "removing temp dir $OUTDIR"
