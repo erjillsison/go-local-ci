@@ -15,6 +15,9 @@ go test -race -tags=integration \
 -coverprofile=$OUTDIR/coverage.out \
 ./...
 
+echo "running goimports..."
+goimports -local "git.garena.com" -w $(find . -name \*.go -not -name \*.pb.go)
+
 echo "running golangci-lint..."
 golangci-lint run --verbose --timeout=3m0s \
 $(if [ "$ENABLE_SONARQUBE" -eq "1" ]; then
