@@ -10,13 +10,16 @@ echo $(pwd)
 echo "creating temp dir $OUTDIR"
 mkdir -p $OUTDIR
 
-echo "running tests..."
-go test -race -tags=integration \
--coverprofile=$OUTDIR/coverage.out \
-./...
+echo "running go mod tidy..."
+go mod tidy
 
 echo "running goimports..."
 goimports -local "git.garena.com" -w $(find . -name \*.go -not -name \*.pb.go)
+
+# We still run golint here despite being included in golangci-lint 
+# because golangci-lint suppresses some golint issues
+echo "running golint..."
+golint ./...
 
 echo "running golangci-lint..."
 golangci-lint run --verbose --timeout=3m0s \
@@ -28,6 +31,10 @@ $(if [ ! -f .golangci.yml ]; then
 fi) \
 ./... | tee "$OUTDIR/gcilint.out"
 
+echo "running tests..."
+go test -race -tags=integration \
+-coverprofile=$OUTDIR/coverage.out \
+./...
 
 if [ "$ENABLE_SONARQUBE" -eq "1" ]; then
     echo "SONAR_HOST_URL: $SONAR_HOST_URL"
@@ -46,4 +53,4 @@ if [ "$ENABLE_SONARQUBE" -eq "1" ]; then
 fi
 
 echo "removing temp dir $OUTDIR"
-rm -rf $OUTDIR# echo "removing temp dir $OUTDIR"
+rm -rf $OUTDIR
