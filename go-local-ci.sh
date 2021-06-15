@@ -16,14 +16,17 @@ goimports -local "git.garena.com" -w $(find . -name \*.go -not -name \*.pb.go)
 # We still run golint here despite it being included in golangci-lint 
 # because golangci-lint suppresses some golint issues
 echo "running golint..."
-golint ./...
+golint -set_exit_status ./...
+[ $? -eq "0" ] || exit 1
 
 echo "running golangci-lint..."
-golangci-lint run --verbose --timeout=3m0s --build-tags=integration \
+golangci-lint run --timeout=3m0s --build-tags=integration \
 $(if [ ! -f .golangci.yml ]; then 
-    echo "--enable goimports,govet,golint,dupl,exportloopref,goconst,bodyclose,dogsled,funlen,misspell,unparam,lll";
+    echo "--enable goimports,govet,golint,dupl,exportloopref,goconst,bodyclose,dogsled,misspell,unparam";
 fi) \
 ./... | tee "$OUTDIR/gcilint.out"
+RC=( "${PIPESTATUS[@]}" )
+[ "${RC[0]}" -eq "0" ] || exit 1
 
 echo "running tests..."
 go test -race -tags=integration \
